@@ -9,7 +9,7 @@ To use this library, you have to know the name of the NWS observation station th
 These are available at their website.  As an example, we'll use ```KCVO```.
 
 ```Swift
-let observation = NWSObservation("KCVO")
+let observation = NWSObservation(stationID: "KCVO")
 ```
 
 The Observation instance contains all the information that the weather service provided.  
