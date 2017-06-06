@@ -21,7 +21,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  SOFTWARE.
 */
 
-import Cocoa
+import Foundation
 
 extension XMLElement {
     public var doubleValue: Double? {
@@ -39,7 +39,7 @@ public struct NWSObservation {
     public var suggestedPickup: String?
     public var suggestedPickupPeriod: Double?
     public var location: String?
-    public var stationId: String?
+    public var stationId: String
     public var latitude: String?
     public var longitude: String?
     public var elevation: Double?
@@ -97,77 +97,79 @@ public struct NWSObservation {
     public var privacyPolicyUrl: String?
 
     public init(stationID: String, baseURL: String = "http://w1.weather.gov/xml/current_obs/") throws {
+        self.stationId = stationID
+
         do {
             let xmlDoc = try XMLDocument(contentsOf: URL(string: "\(baseURL)\(stationID).xml")!, options: 0)
 
             if let rootChild = xmlDoc.child(at: 1) as? XMLElement {
-                credit                  = rootChild.elements(forName: "credit"                   ).first?.stringValue
+                credit                = rootChild.elements(forName: "credit"                   ).first?.stringValue
                 creditURL             = rootChild.elements(forName: "credit_URL"               ).first?.stringValue
-                weather                 = rootChild.elements(forName: "weather"                  ).first?.stringValue
+                weather               = rootChild.elements(forName: "weather"                  ).first?.stringValue
                 iconUrlBase           = rootChild.elements(forName: "icon_url_base"            ).first?.stringValue
                 iconName              = rootChild.elements(forName: "icon_name"                ).first?.stringValue
-                twoDayHistoryUrl     = rootChild.elements(forName: "two_day_history_url"      ).first?.stringValue
+                twoDayHistoryUrl      = rootChild.elements(forName: "two_day_history_url"      ).first?.stringValue
                 iconUrlName           = rootChild.elements(forName: "icon_url_name"            ).first?.stringValue
-                obUrl                  = rootChild.elements(forName: "ob_url"                   ).first?.stringValue
-                disclaimerUrl          = rootChild.elements(forName: "disclaimer_url"           ).first?.stringValue
-                copyrightUrl           = rootChild.elements(forName: "copyright_url"            ).first?.stringValue
+                obUrl                 = rootChild.elements(forName: "ob_url"                   ).first?.stringValue
+                disclaimerUrl         = rootChild.elements(forName: "disclaimer_url"           ).first?.stringValue
+                copyrightUrl          = rootChild.elements(forName: "copyright_url"            ).first?.stringValue
                 privacyPolicyUrl      = rootChild.elements(forName: "privacy_policy_url"       ).first?.stringValue
 
                 suggestedPickup        = rootChild.elements(forName: "suggested_pickup"         ).first?.stringValue
-                location                = rootChild.elements(forName: "location"                 ).first?.stringValue
-                latitude                = rootChild.elements(forName: "latitude"                 ).first?.stringValue
-                longitude               = rootChild.elements(forName: "longitude"                ).first?.stringValue
+                location               = rootChild.elements(forName: "location"                 ).first?.stringValue
+                latitude               = rootChild.elements(forName: "latitude"                 ).first?.stringValue
+                longitude              = rootChild.elements(forName: "longitude"                ).first?.stringValue
                 observationTime        = rootChild.elements(forName: "observation_time"         ).first?.stringValue
-                observationTimeRfc822 = rootChild.elements(forName: "observation_time_rfc822"  ).first?.stringValue
-                suggestedPickupPeriod = rootChild.elements(forName: "suggested_pickup_period"  ).first?.doubleValue
-                elevation               = rootChild.elements(forName: "elevation"                ).first?.doubleValue
+                observationTimeRfc822  = rootChild.elements(forName: "observation_time_rfc822"  ).first?.stringValue
+                suggestedPickupPeriod  = rootChild.elements(forName: "suggested_pickup_period"  ).first?.doubleValue
+                elevation              = rootChild.elements(forName: "elevation"                ).first?.doubleValue
 
                 temperatureString      = rootChild.elements(forName: "temperature_string"       ).first?.stringValue
                 dewpointString         = rootChild.elements(forName: "dewpoint_string"          ).first?.stringValue
-                heatIndexString       = rootChild.elements(forName: "heat_index_string"        ).first?.stringValue
+                heatIndexString        = rootChild.elements(forName: "heat_index_string"        ).first?.stringValue
                 tempF                  = rootChild.elements(forName: "temp_f"                   ).first?.doubleValue
                 tempC                  = rootChild.elements(forName: "temp_c"                   ).first?.doubleValue
                 relativeHumidity       = rootChild.elements(forName: "relative_humidity"        ).first?.doubleValue
 
-                waterTempF            = rootChild.elements(forName: "water_temp_f"             ).first?.doubleValue
-                waterTempC            = rootChild.elements(forName: "water_temp_c"             ).first?.doubleValue
+                waterTempF             = rootChild.elements(forName: "water_temp_f"             ).first?.doubleValue
+                waterTempC             = rootChild.elements(forName: "water_temp_c"             ).first?.doubleValue
                 windString             = rootChild.elements(forName: "wind_string"              ).first?.stringValue
                 windDir                = rootChild.elements(forName: "wind_dir"                 ).first?.stringValue
 
                 windDegrees            = rootChild.elements(forName: "wind_degrees"             ).first?.doubleValue
                 windMph                = rootChild.elements(forName: "wind_mph"                 ).first?.doubleValue
-                windGustMph           = rootChild.elements(forName: "wind_gust_mph"            ).first?.doubleValue
+                windGustMph            = rootChild.elements(forName: "wind_gust_mph"            ).first?.doubleValue
                 windKt                 = rootChild.elements(forName: "wind_kt"                  ).first?.doubleValue
-                windGustKt            = rootChild.elements(forName: "wind_gust_kt"             ).first?.doubleValue
+                windGustKt             = rootChild.elements(forName: "wind_gust_kt"             ).first?.doubleValue
 
                 pressureString         = rootChild.elements(forName: "pressure_string"          ).first?.stringValue
                 pressureMb             = rootChild.elements(forName: "pressure_mb"              ).first?.doubleValue
                 pressureIn             = rootChild.elements(forName: "pressure_in"              ).first?.doubleValue
-                pressureTendencyMb    = rootChild.elements(forName: "pressure_tendency_mb"     ).first?.doubleValue
-                pressureTendencyIn    = rootChild.elements(forName: "pressure_tendency_in"     ).first?.doubleValue
+                pressureTendencyMb     = rootChild.elements(forName: "pressure_tendency_mb"     ).first?.doubleValue
+                pressureTendencyIn     = rootChild.elements(forName: "pressure_tendency_in"     ).first?.doubleValue
 
                 windchillString        = rootChild.elements(forName: "windchill_string"         ).first?.stringValue
                 dewpointF              = rootChild.elements(forName: "dewpoint_f"               ).first?.doubleValue
                 dewpointC              = rootChild.elements(forName: "dewpoint_c"               ).first?.doubleValue
-                heatIndexF            = rootChild.elements(forName: "heat_index_f"             ).first?.doubleValue
-                heatIndexC            = rootChild.elements(forName: "heat_index_c"             ).first?.doubleValue
+                heatIndexF             = rootChild.elements(forName: "heat_index_f"             ).first?.doubleValue
+                heatIndexC             = rootChild.elements(forName: "heat_index_c"             ).first?.doubleValue
                 windchillF             = rootChild.elements(forName: "windchill_f"              ).first?.doubleValue
                 windchillC             = rootChild.elements(forName: "windchill_c"              ).first?.doubleValue
 
                 visibilityMi           = rootChild.elements(forName: "visibility_mi"            ).first?.doubleValue
 
-                steepness               = rootChild.elements(forName: "steepness"                ).first?.stringValue
+                steepness              = rootChild.elements(forName: "steepness"                ).first?.stringValue
                 swellPeriod            = rootChild.elements(forName: "swell_period"             ).first?.stringValue
                 swellDir               = rootChild.elements(forName: "swell_dir"                ).first?.stringValue
-                meanWaveDir           = rootChild.elements(forName: "mean_wave_dir"            ).first?.stringValue
-                waveHeightM           = rootChild.elements(forName: "wave_height_m"            ).first?.doubleValue
-                waveHeightFt          = rootChild.elements(forName: "wave_height_ft"           ).first?.doubleValue
-                dominantPeriodSec     = rootChild.elements(forName: "dominant_period_sec"      ).first?.doubleValue
-                averagePeriodSec      = rootChild.elements(forName: "average_period_sec"       ).first?.doubleValue
-                meanWaveDegrees       = rootChild.elements(forName: "mean_wave_degrees"        ).first?.doubleValue
+                meanWaveDir            = rootChild.elements(forName: "mean_wave_dir"            ).first?.stringValue
+                waveHeightM            = rootChild.elements(forName: "wave_height_m"            ).first?.doubleValue
+                waveHeightFt           = rootChild.elements(forName: "wave_height_ft"           ).first?.doubleValue
+                dominantPeriodSec      = rootChild.elements(forName: "dominant_period_sec"      ).first?.doubleValue
+                averagePeriodSec       = rootChild.elements(forName: "average_period_sec"       ).first?.doubleValue
+                meanWaveDegrees        = rootChild.elements(forName: "mean_wave_degrees"        ).first?.doubleValue
                 tideFt                 = rootChild.elements(forName: "tide_ft"                  ).first?.doubleValue
-                waterColumnHeight     = rootChild.elements(forName: "water_column_height"      ).first?.doubleValue
-                surfHeightFt          = rootChild.elements(forName: "surf_height_ft"           ).first?.stringValue
+                waterColumnHeight      = rootChild.elements(forName: "water_column_height"      ).first?.doubleValue
+                surfHeightFt           = rootChild.elements(forName: "surf_height_ft"           ).first?.stringValue
                 swellDegrees           = rootChild.elements(forName: "swell_degrees"            ).first?.doubleValue
             }
         } catch {
