@@ -99,8 +99,6 @@ public struct NWSObservation {
     public init(stationID: String, baseURL: String = "http://w1.weather.gov/xml/current_obs/") throws {
         self.stationId = stationID
 
-        print("Attempting to collect the weather from: \(baseURL)\(stationID).xml")
-        
         do {
             let xmlDoc = try XMLDocument(contentsOf: URL(string: "\(baseURL)\(stationID).xml")!, options: 0)
 
