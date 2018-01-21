@@ -100,7 +100,7 @@ public struct NWSObservation {
         self.stationId = stationID
 
         do {
-            let xmlDoc = try XMLDocument(contentsOf: URL(string: "\(baseURL)\(stationID).xml")!, options: 0)
+            let xmlDoc = try XMLDocument(contentsOf: URL(string: "\(baseURL)\(stationID).xml")!, options: XMLNode.Options(rawValue: 0))
 
             if let rootChild = xmlDoc.child(at: 1) as? XMLElement {
                 credit                = rootChild.elements(forName: "credit"                   ).first?.stringValue
